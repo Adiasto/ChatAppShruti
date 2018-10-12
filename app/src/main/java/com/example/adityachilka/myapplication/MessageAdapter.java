@@ -78,7 +78,7 @@ public class MessageAdapter extends ArrayAdapter<ChatBubble> {
         public ViewHolder(View v) {
 
             msg = (TextView) v.findViewById(R.id.txt_msg);  //txt_msg is the id of textview in sender
-            received_msg = (TextView) v.findViewById(R.id.txt1_msg);
+//            received_msg = (TextView) v.findViewById(R.id.txt1_msg);
         }
     }
 }
