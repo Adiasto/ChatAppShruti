@@ -34,6 +34,7 @@ public class Chatclass extends Fragment {
     private ListView chat_list;
     private TextView name;
     private ImageView image;
+    private TextView email;
     private List<ProfileList> profileLists;
     private ArrayAdapter<ProfileList> adapter;
     private DatabaseReference myRef;
@@ -45,14 +46,16 @@ public class Chatclass extends Fragment {
 
         View view= inflater.inflate(R.layout.fragment_chat,container,false);
 
+
         mAuth=FirebaseAuth.getInstance();
         profileLists = new ArrayList<>();
         final Object[] value = new Object[1];
         chat_list = (ListView)view.findViewById(R.id.listview_chat);
         name=(TextView)view.findViewById(R.id.name_person_id);
         image=(ImageView)view.findViewById(R.id.img_circle_id);
+        email=(TextView)view.findViewById(R.id.email_person_id);
 
-        myRef=FirebaseDatabase.getInstance().getReference().child("users");
+        myRef= FirebaseDatabase.getInstance().getReference().child("users");
 //                .child(mAuth.getCurrentUser().getUid());
 
         myRef.addValueEventListener(new ValueEventListener() {
@@ -78,34 +81,17 @@ public class Chatclass extends Fragment {
         chat_list.setAdapter(adapter);
 
 
-//        String[] items={"hii",
-//                         "hello",
-//                          "this is string"};
-//
-//
-//
-//        ListView listView=(ListView)view.findViewById(R.id.listview_chat);
-//
-//        ArrayAdapter<String> profileAdapter=new ArrayAdapter<String>(
-//                getActivity(),
-//                android.R.layout.simple_list_item_activated_1,
-//                items
-//        );
-//        listView.setAdapter(profileAdapter);
-
         return view;
     }
-
 
 
     public void storeUsers(Map<String,Object> users){
         //iterate through each user, ignoring their UID
         for (Map.Entry<String, Object> entry : users.entrySet()) {
 
-            if(entry.getKey()!=mAuth.getCurrentUser().getUid()) {
-                //Get user map
+            if(!entry.getKey().equals(mAuth.getCurrentUser().getUid())) {
                 Map singleUser = (Map) entry.getValue();
-                System.out.println("-----------------------" + singleUser);
+                System.out.println("-----------------------" + entry.getKey());
                 if (singleUser.get("email") != null && singleUser.get("username") != null) {
                     profileLists.add(new ProfileList(entry.getKey(), singleUser.get("email").toString(), singleUser.get("username").toString(), singleUser.get("contact").toString()));
                 }

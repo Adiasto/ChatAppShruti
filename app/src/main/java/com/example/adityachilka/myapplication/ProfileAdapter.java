@@ -2,6 +2,7 @@ package com.example.adityachilka.myapplication;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -23,6 +28,7 @@ public class ProfileAdapter extends ArrayAdapter<ProfileList> {
 
     private List<ProfileList> profiles;
     private ImageFromURL imageFromURL;
+    private StorageReference userProfileStorageRef;
 
     public ProfileAdapter(Activity context, int resource, List<ProfileList> objects) {
         super(context, resource, objects);
@@ -34,7 +40,7 @@ public class ProfileAdapter extends ArrayAdapter<ProfileList> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         LayoutInflater inflater=(LayoutInflater)activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         int layoutResource=0;
@@ -49,22 +55,32 @@ public class ProfileAdapter extends ArrayAdapter<ProfileList> {
         else
         {
             //if(ProfileList.getSenderOrReceiver()==true){
-                convertView=inflater.inflate(R.layout.person_chat,parent,false);
-                holder=new ViewHolder(convertView);
-                convertView.setTag(holder);
-                holder.name.setText((CharSequence) profileList.getUserName());
-                new ImageFromURL(holder.image).execute(profileList.getEmail());
+            convertView=inflater.inflate(R.layout.person_chat,parent,false);
+            holder=new ViewHolder(convertView);
+            convertView.setTag(holder);
+            holder.name.setText((CharSequence) profileList.getUserName());
+//            new ImageFromURL(holder.image).execute(profileList.getEmail());
+            holder.email.setText((CharSequence)profileList.getEmail());
 
-                convertView.setOnClickListener(new View.OnClickListener() {
+                userProfileStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://chatapp-2bba7.appspot.com").child("profileimages");
+                userProfileStorageRef.child(profileList.getUserId()+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onClick(View v) {
-                        Intent startChat=new Intent(getContext(),MainchatActivity.class);
-                        startChat.putExtra("userId",profileList.getUserId());
-                        getContext().startActivity(startChat);
-                        Toast.makeText(getContext(),profileList.getUserId(),Toast.LENGTH_LONG).show();
+                    public void onSuccess(Uri uri) {
+                        new ImageFromURL(holder.image).execute(uri.toString());
                     }
                 });
-           // }
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent startChat=new Intent(getContext(),MainchatActivity.class);
+                    startChat.putExtra("userId",profileList.getUserId());
+                    startChat.putExtra("userName",profileList.getUserName());
+                    getContext().startActivity(startChat);
+                    Toast.makeText(getContext(),profileList.getUserId(),Toast.LENGTH_LONG).show();
+                }
+            });
+            // }
 //            if(ChatBubble.getSenderOrReceiver()==false){
 //                convertView=inflater.inflate(R.layout.receiver,parent,false);
 //                holder=new MessageAdapter.ViewHolder(convertView);
@@ -94,11 +110,15 @@ public class ProfileAdapter extends ArrayAdapter<ProfileList> {
     {
         private TextView name;
         private ImageView image;
+        private TextView email;
 
         public ViewHolder(View v){
 
             name= (TextView)v.findViewById(R.id.name_person_id);  //name_person_id is the id of textview in person_chat
             image=(ImageView)v.findViewById(R.id.img_circle_id);
+            email=(TextView)v.findViewById(R.id.email_person_id);
         }
     }
+
+
 }

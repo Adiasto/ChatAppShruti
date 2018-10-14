@@ -5,10 +5,20 @@ package com.example.adityachilka.myapplication;
  */
 
 public class ProfileList {
+
     private String email;
     private String userName;
     private String userId;
     private String contact;
+    private String profilePicture;
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;

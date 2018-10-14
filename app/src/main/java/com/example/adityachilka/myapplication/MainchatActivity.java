@@ -8,13 +8,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,14 +23,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static android.support.constraint.Constraints.TAG;
 
 public class MainchatActivity extends AppCompatActivity {
 
@@ -43,6 +38,8 @@ public class MainchatActivity extends AppCompatActivity {
     private ArrayList<ChatBubble> ChatBubbles;
     private ArrayAdapter<ChatBubble> adapter;
     String profileID;
+    String profileName;
+    TextView userName;
     FirebaseAuth mAuth;
     int messageIndex = 0;
     private RecyclerView.Adapter mAdapter;
@@ -51,6 +48,9 @@ public class MainchatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        profileName = getIntent().getStringExtra("userName");
+        setTitle(profileName);
+
         setContentView(R.layout.activity_mainchat);
 
         mAuth = FirebaseAuth.getInstance();
@@ -66,6 +66,10 @@ public class MainchatActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(this);
         list_view.setLayoutManager(mLayoutManager);
+
+//        userName= (TextView) findViewById(R.id.userName);
+//        userName.setText(profileName);
+
 
         btn_send = findViewById(R.id.btnSend);
         editMsg = (EditText) findViewById(R.id.etTypeMsg);
