@@ -6,7 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     ArrayList<ChatBubble> messages;
@@ -51,6 +57,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.message.setText(this.messages.get(position).getContent());
 //        holder.image.setImageResource(personImages.get(position));
         // implement setOnClickListener event on item view.
+        SimpleDateFormat format=new SimpleDateFormat("hh:mm");
+        String dateString=format.format(new Date(Long.parseLong(this.messages.get(position).getTimestamp())));
+        holder.timestamp.setText(dateString);
+//        Calendar cal=Calendar.getInstance(Locale.ENGLISH);
+//        cal.setTimeInMillis(this.messages.get(position).getTimestamp()*1000L);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,10 +76,21 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView message;
+        TextView timestamp;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             message = (TextView) itemView.findViewById(R.id.txt_msg);
+            timestamp =(TextView) itemView.findViewById(R.id.timestamp);
         }
     }
+
+
+//    public void setFilter(ArrayList<ChatBubble> newList)
+//    {
+//        messages=new ArrayList<>();
+//        messages.addAll(newList);
+//        notifyDataSetChanged();
+//
+//    }
 }

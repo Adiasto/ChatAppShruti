@@ -81,6 +81,7 @@ public class Chatclass extends Fragment {
         chat_list.setAdapter(adapter);
 
 
+
         return view;
     }
 
@@ -90,6 +91,7 @@ public class Chatclass extends Fragment {
         for (Map.Entry<String, Object> entry : users.entrySet()) {
 
             if(!entry.getKey().equals(mAuth.getCurrentUser().getUid())) {
+                //Get user map
                 Map singleUser = (Map) entry.getValue();
                 System.out.println("-----------------------" + entry.getKey());
                 if (singleUser.get("email") != null && singleUser.get("username") != null) {

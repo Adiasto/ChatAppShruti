@@ -1,5 +1,7 @@
 package com.example.adityachilka.myapplication;
 
+import java.security.Timestamp;
+
 /**
  * Created by root1 on 1/10/18.
  */
@@ -8,6 +10,16 @@ public class ChatBubble {
 
     private  String content;
     private boolean isSent;
+    private String timestamp;
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
 
     public void setSent(boolean sent) {
         isSent = sent;
@@ -26,11 +38,10 @@ public class ChatBubble {
         return isSent;
     }
 
-    public ChatBubble(String content, boolean isSent) {
+    public ChatBubble(String content, boolean isSent,String timestamp) {
         this.content = content;
         this.isSent = isSent;
+        this.timestamp=timestamp;
     }
-
-
 
 }

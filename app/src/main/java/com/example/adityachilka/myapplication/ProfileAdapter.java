@@ -62,13 +62,13 @@ public class ProfileAdapter extends ArrayAdapter<ProfileList> {
 //            new ImageFromURL(holder.image).execute(profileList.getEmail());
             holder.email.setText((CharSequence)profileList.getEmail());
 
-                userProfileStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://chatapp-2bba7.appspot.com").child("profileimages");
-                userProfileStorageRef.child(profileList.getUserId()+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        new ImageFromURL(holder.image).execute(uri.toString());
-                    }
-                });
+            userProfileStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://chatapp-2bba7.appspot.com").child("profileimages");
+            userProfileStorageRef.child(profileList.getUserId()+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    new ImageFromURL(holder.image).execute(uri.toString());
+                }
+            });
 
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,16 +77,8 @@ public class ProfileAdapter extends ArrayAdapter<ProfileList> {
                     startChat.putExtra("userId",profileList.getUserId());
                     startChat.putExtra("userName",profileList.getUserName());
                     getContext().startActivity(startChat);
-                    Toast.makeText(getContext(),profileList.getUserId(),Toast.LENGTH_LONG).show();
                 }
             });
-            // }
-//            if(ChatBubble.getSenderOrReceiver()==false){
-//                convertView=inflater.inflate(R.layout.receiver,parent,false);
-//                holder=new MessageAdapter.ViewHolder(convertView);
-//                convertView.setTag(holder);
-//                holder.msg.setText(ChatBubble.getContent());
-//            }
         }
 
         //set msg content
@@ -119,6 +111,7 @@ public class ProfileAdapter extends ArrayAdapter<ProfileList> {
             email=(TextView)v.findViewById(R.id.email_person_id);
         }
     }
+
 
 
 }
